@@ -102,16 +102,25 @@ public class ActCapturar extends AppCompatActivity implements CameraBridgeViewBa
         //initialize the HOG descriptor/person detector
         HOGDescriptor hog = new HOGDescriptor();
         hog.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
+        int fdc=2;
+        double fdci=0.5;
+
 
         MatOfRect foundLocations = new MatOfRect();
         MatOfDouble foundWeights = new MatOfDouble();
 
-        Mat tempMat = new Mat(frame.rows(), frame.cols(), CvType.CV_8UC3);
+        Mat tempMat = new Mat(frame.rows(), frame.cols(), CvType.CV_8UC1); //CvType.CV_8UC3
+        Mat dst = new Mat(frame.rows(), frame.cols(), CvType.CV_8UC1);
+
 
         /*Imgproc.cvtColor(source mat, destination mat1, Imgproc.COLOR_RGB2GRAY);
         El método cvtColor () toma tres parámetros que son la matriz de imagen de origen, la matriz de imagen de destino, y el tipo de conversión de color.
          */
-        Imgproc.cvtColor(frame, tempMat, Imgproc.COLOR_RGBA2RGB);
+        Imgproc.cvtColor(frame, tempMat, Imgproc.COLOR_RGBA2GRAY); //Imgproc.COLOR_RGBA2RGB
+
+        Imgproc.resize(tempMat, tempMat, new Size(),fdci, fdci, Imgproc.INTER_AREA);
+
+
 
         /*HOGDescriptor :: detectMultiScale
         • testImage: La imagen en la que queremos que detecte.
@@ -129,6 +138,7 @@ public class ActCapturar extends AppCompatActivity implements CameraBridgeViewBa
          */
         hog.detectMultiScale(tempMat, foundLocations, foundWeights, 0.5, new Size(8,8),
                 new Size(32, 32), 1.05, 2, false);
+        
 
         //(tempMat, foundLocations, foundWeights, 1.4, new Size(8,8),
         //new Size(0, 0), 1.04, 2, false);
@@ -137,6 +147,11 @@ public class ActCapturar extends AppCompatActivity implements CameraBridgeViewBa
         filterRects(foundLocations.toList(), foundLocationsFilteredList);
 
         for (Rect foundLocation : foundLocationsFilteredList) {
+            foundLocation.x=foundLocation.x*fdc;
+            foundLocation.y=foundLocation.y*fdc;
+            foundLocation.height=foundLocation.height*fdc;
+            foundLocation.width=foundLocation.width*fdc;
+
             Imgproc.rectangle(frame, foundLocation.tl(), foundLocation.br(), new Scalar(0, 255, 0), 3);
         }
 

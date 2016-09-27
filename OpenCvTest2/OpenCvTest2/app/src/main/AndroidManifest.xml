@@ -24,8 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActCapturar" />
-        <activity android:name=".ActAbout"></activity>
+        <activity android:name=".ActCapturar"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".ActAbout"
+                  android:screenOrientation="portrait">
+        </activity>
     </application>
 
 
