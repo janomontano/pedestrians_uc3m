@@ -18,6 +18,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.HOGDescriptor;
 
 import java.util.List;
@@ -34,6 +35,8 @@ public class ActCapturar extends AppCompatActivity implements CameraBridgeViewBa
 
     private static String TAG = "MainActivity";
     private HOGDescriptor hog;
+
+    CascadeClassifier pedestrians = new CascadeClassifier("C:\\TFG_peatones\\OpenCvTest2\\OpenCvTest2\\app\\src\\main\\assets\\pedestian_cascade_web_LBP.xml");
     private BaseLoaderCallback mLoaderCallBack = new  BaseLoaderCallback(this){
         @Override
         public void onManagerConnected(int status){
@@ -138,6 +141,7 @@ public class ActCapturar extends AppCompatActivity implements CameraBridgeViewBa
          */
         hog.detectMultiScale(tempMat, foundLocations, foundWeights, 0.5, new Size(8,8),
                 new Size(32, 32), 1.05, 2, false);
+       // pedestrians.detectMultiScale(tempMat,foundLocations);
         
 
         //(tempMat, foundLocations, foundWeights, 1.4, new Size(8,8),
